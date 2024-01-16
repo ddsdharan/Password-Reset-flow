@@ -1,0 +1,15 @@
+.wrapper {
+    background: rgba(255, 255, 255, 0.318);
+    backdrop-filter: blur(10px);
+    border-color: grey;
+    border-width: 0.5px;
+    border-radius: 10px;
+    border-style:solid;
+    display: inline-block;
+    position: relative;
+    text-align: center;
+  }
+  
+body {
+    background: linear-gradient(110deg, #fdcd3b 60%, #ffed4b 60%);
+}

@@ -1,0 +1,69 @@
+body {
+  margin: auto;
+  width: 100%;
+  padding: 20px;
+}
+
+.add-user-container {
+  text-align: center;
+}
+
+.add-user-form {
+  display: flex;
+  gap: 25px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 25px;
+}
+
+.add-user-name {
+  width: 400px;
+  height: 50px;
+  margin-top: 10px;
+}
+
+.add-user-btn {
+  width: 400px;
+  height: 50px;
+  font-size: 20px;
+  background-color: skyblue;
+  /* margin-top: 10px; */
+}
+
+.pageNotFound {
+  text-align: center;
+}
+
+.imageForNotFound {
+  height: 50% !important;
+  width: 50% !important;
+}
+
+@media screen and (max-width: 768px) {
+  .add-user-name {
+    width: 220px !important;
+  }
+
+  .add-user-btn {
+    width: 220px;
+  }
+
+  .add-user-form {
+    display: flex;
+    gap: 25px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 25px 25px;
+    margin: auto;
+  }
+
+  body {
+    margin: auto;
+    width: 100%;
+    padding: 5px;
+  }
+
+}
