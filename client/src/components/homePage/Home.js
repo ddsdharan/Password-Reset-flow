@@ -12,6 +12,7 @@ export const Home = () => {
     return (
         <>
             <div className="Heading"><h1>HOME PAGE</h1></div>
+            <h3>Hello ${FirstName}</h3>
             <div className="home-content"><p>This is a project to practice password reset flow
                 using React, MongoDB, NodeJS, Express along with few frameworks</p></div>
             <div className="logout-button"><button type="button" class="btn btn-dark" onClick={handleLogOut}>Log Out</button>
