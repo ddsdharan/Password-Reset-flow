@@ -1,135 +1,143 @@
-import { Typography } from '@mui/material'
-import React from 'react'
-import { useFormik } from 'formik'
+import React from "react";
+import { Typography, TextField } from "@mui/material";
+import { useFormik } from "formik";
 import * as Yup from "yup";
-import TextField from '@mui/material/TextField'
-import { useNavigate } from 'react-router-dom'
-import { API } from '../../global';
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { ColorButton } from '../login/Login';
+import { useNavigate, Link } from "react-router-dom";
+import { API } from "../../global";
+import { ColorButton } from "../login/Login";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 export function Register() {
-
     const navigate = useNavigate();
-    const [errorMsg, setErrorMsg] = useState("");
-    const login = () => navigate("/Login");
 
-    const regUser = (newUser) => {
-        fetch(`${API}/signup`, {
-            method: "POST",
-            body: JSON.stringify(newUser),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        }).then((data) => data.json())
-            .then((data1) => {
-                if (data1.message === "successful Signup") {
-                    login();
-                }
-                else {
-                    setErrorMsg(data1.message);
-                }
+    const registerUser = async (newUser) => {
+        try {
+            const res = await fetch(`${API}/signup`, {
+                method: "POST",
+                body: JSON.stringify(newUser),
+                headers: { "Content-Type": "application/json" },
             });
+            const data = await res.json();
 
+            if (data.message === "successful Signup") {
+                toast.success("Registration complete!", {
+                    position: "top-right",
+                });
+                setTimeout(() => navigate("/Login"), 1500);
+            } else {
+                toast.error(data.message, { position: "top-right" });
+            }
+        } catch (error) {
+            console.error("Registration error:", error);
+            toast.error("An error occurred during registration.", {
+                position: "top-right",
+            });
+        }
     };
-    const initialValues = {
-        FirstName: '',
-        LastName: '',
-        Email: '',
-        Password: '',
-    }
-    const userValidationSchema = Yup.object({
-        FirstName: Yup.string().required('Required'),
-        LastName: Yup.string().required('Required'),
-        Email: Yup.string().email("Must be a valid email").required('Required'),
-        Password: Yup.string().required('Required').min(8),
-    })
 
-    const { handleBlur, handleChange, handleSubmit, values, errors, touched } = useFormik({
-        initialValues: initialValues,
-        validationSchema: userValidationSchema,
-        onSubmit: (newUser) => {
-            setErrorMsg("");
-            regUser(newUser);
-        },
+    const initialValues = {
+        FirstName: "",
+        LastName: "",
+        Email: "",
+        Password: "",
+    };
+
+    const validationSchema = Yup.object({
+        FirstName: Yup.string().required("Required"),
+        LastName: Yup.string().required("Required"),
+        Email: Yup.string().email("Must be a valid email").required("Required"),
+        Password: Yup.string().min(8, "Must be at least 8 characters").required("Required"),
     });
 
-    return <div className="add-user-container" >
-        <div className="wrapper" style={{
-            position: "relative",
-            textAlign: "center",
-            borderStyle: "solid",
-            borderWidth: "5px",
-            display: "inline-block"
-        }}>
-            <form
-                onSubmit={handleSubmit}
-                className="add-user-form" >
-                <Typography variant="h4" pb={2}
-                    sx={{
-                        textAlign: 'center',
-                    }}>
-                    Register User
-                </Typography>
+    const { handleBlur, handleChange, handleSubmit, values, errors, touched } =
+        useFormik({
+            initialValues,
+            validationSchema,
+            onSubmit: (newUser) => {
+                registerUser(newUser);
+            },
+        });
 
-                <TextField
-                    className="add-user-name"
-                    label="First Name"
-                    type="text"
-                    value={values.FirstName}
-                    name="FirstName"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={touched.FirstName && errors.FirstName ? true : false}
-                    helperText={touched.FirstName && errors.FirstName ? errors.FirstName : ""}
-                />
-                <TextField
-                    className="add-user-name"
-                    label="Last Name"
-                    type="text"
-                    value={values.LastName}
-                    name="LastName"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={touched.LastName && errors.LastName ? true : false}
-                    helperText={touched.LastName && errors.LastName ? errors.LastName : ""}
-                />
-                <TextField
-                    className="add-user-name"
-                    label="Email"
-                    type="Email"
-                    value={values.Email}
-                    name="Email"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={touched.Email && errors.Email ? true : false}
-                    helperText={touched.Email && errors.Email ? errors.Email : ""}
-                />
-                <TextField
-                    className="add-user-name"
-                    label="Password"
-                    type="password"
-                    value={values.Password}
-                    name="Password"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={touched.Password && errors.Password ? true : false}
-                    helperText={touched.Password && errors.Password ? errors.Password : ""}
-                />
-                <ColorButton className="add-user-btn"
-                    type="submit"
-                    variant="contained">SignUp</ColorButton>
-                <div className="text-center" style={{ color: "red" }}>
-                    {errorMsg}
-                </div>
-                <div className="text-center" style={{ color: "blue" }}>
-                    <Link to="/Login">Login!</Link>
-                    <br />
-                    <br />
-                    <Link to="/ForgetPassword">Forget Password?</Link>
-                </div>
-            </form>
+    return (
+        <div className="add-user-container">
+            <div
+                className="wrapper"
+                style={{
+                    position: "relative",
+                    textAlign: "center",
+                    borderStyle: "solid",
+                    borderWidth: "5px",
+                    display: "inline-block",
+                }}
+            >
+                <form onSubmit={handleSubmit} className="add-user-form">
+                    <Typography variant="h4" pb={2} sx={{ textAlign: "center" }}>
+                        Register User
+                    </Typography>
+
+                    <TextField
+                        className="add-user-name"
+                        label="First Name"
+                        type="text"
+                        name="FirstName"
+                        value={values.FirstName}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={Boolean(touched.FirstName && errors.FirstName)}
+                        helperText={touched.FirstName && errors.FirstName ? errors.FirstName : ""}
+                    />
+
+                    <TextField
+                        className="add-user-name"
+                        label="Last Name"
+                        type="text"
+                        name="LastName"
+                        value={values.LastName}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={Boolean(touched.LastName && errors.LastName)}
+                        helperText={touched.LastName && errors.LastName ? errors.LastName : ""}
+                    />
+
+                    <TextField
+                        className="add-user-name"
+                        label="Email"
+                        type="email"
+                        name="Email"
+                        value={values.Email}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={Boolean(touched.Email && errors.Email)}
+                        helperText={touched.Email && errors.Email ? errors.Email : ""}
+                    />
+
+                    <TextField
+                        className="add-user-name"
+                        label="Password"
+                        type="password"
+                        name="Password"
+                        value={values.Password}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={Boolean(touched.Password && errors.Password)}
+                        helperText={touched.Password && errors.Password ? errors.Password : ""}
+                    />
+
+                    <ColorButton className="add-user-btn" type="submit" variant="contained">
+                        SignUp
+                    </ColorButton>
+
+                    <div className="text-center" style={{ color: "blue", marginTop: "10px" }}>
+                        <Link to="/Login">Login!</Link>
+                        <br />
+                        <br />
+                        <Link to="/ForgetPassword">Forget Password?</Link>
+                    </div>
+                </form>
+            </div>
+            <ToastContainer position="top-right" autoClose={3000} />
         </div>
-    </div>;
+    );
 }

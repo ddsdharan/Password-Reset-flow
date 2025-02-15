@@ -59,7 +59,7 @@ export function ForgetPassword() {
                     sx={{
                         textAlign: 'center',
                     }}>
-                    E-mail Details
+                    Password Reset
                 </Typography>
 
                 <TextField
@@ -81,10 +81,10 @@ export function ForgetPassword() {
                     {errorMsg}
                 </div>
                 <div className="text-center" style={{ color: "blue" }}>
-                    <Link to="/Register">Create  Account!</Link>
+                    <Link to="/Register">Create new account</Link>
                     <br />
                     <br />
-                    <Link to="/Login">I can remember my password now!</Link>
+                    <Link to="/Login">Remember Password?</Link>
                 </div>
             </form>
         </div>
